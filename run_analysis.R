@@ -36,15 +36,16 @@ testY <- read.table("UCI HAR Dataset/test/Y_test.txt")
 testSubjects <- read.table("UCI HAR Dataset/test/subject_test.txt")
 test <- cbind(testSubjects, testY, test)
 
-# merge datasets and add labels
+# Merge datasets and add labels
 MergeData <- rbind(train, test)
 colnames(MergeData) <- c("subject", "activity", FilteredFeatures.names)
 
-# factorise activities and subjects
+# Factorise activities and subjects
 MergeData$activity <- factor(MergeData$activity, levels = activityLabels[,1], labels = activityLabels[,2])
 MergeData$subject <- as.factor(MergeData$subject)
 
+# Labels the data set with descriptive variable names
 MergeData.melted <- melt(MergeData, id = c("subject", "activity"))
 MergeData.mean <- dcast(MergeData.melted, subject + activity ~ variable, mean)
-
+# Output average of each variable for each activity and each subject
 write.table(MergeData.mean, "result.txt", row.names = FALSE, quote = FALSE)
